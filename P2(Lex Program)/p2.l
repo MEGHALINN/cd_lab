@@ -1,33 +1,27 @@
 %{
-#include <stdio.h>
-#include <string.h>
-
-char name[40];
-char sub[5];   
+    #include <stdio.h>
+    int flag=0;
 %}
 
 %%
-[0-9A-Za-z]+ {
-    if (strstr(yytext, sub) == NULL)
-        printf("%-10s : does NOT contain '%s'\n", yytext, sub);
-    else
-        printf("%-10s : contains '%s'\n", yytext, sub);
-}
-[ \t\n]+    ;  
+megh        { flag =1;}
+\n          { 
+            if(flag){
+                printf("Invalid String\n ");
+            }
+            else{
+                printf(" Valid String \n");
+            }
+            flag =0 ;}
+.           {}
+end         { return 0;}
 %%
 
-int yywrap(void) {
+int yywrap(){
     return 1;
 }
-
-int main() {
-    printf("Enter your name: ");
-    scanf("%s", name);
-    
-    strncpy(sub, name, 4);
-    sub[4] = '\0';
-
-    printf("Enter input text:\n");
+int main(){
+    printf("Enter the string (type end to finish):");
     yylex();
     return 0;
 }

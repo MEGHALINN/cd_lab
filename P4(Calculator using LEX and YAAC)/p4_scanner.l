@@ -1,18 +1,25 @@
 %{
-#include "p4_parser.tab.h"
-#include <stdlib.h>
+    #include "y.tab.h"
 %}
 
 %%
-[1-9][0-9]* {yylval.ival=atoi(yytext);return NUMBER;}
-[0] {yylval.ival=atoi(yytext);return NUMBER;}
-[+] {return PLUS;}
-[/] {return DIVISION;}
-[*] {return MULTIPLICATION;}
-[-] {return MINUS;}
-[(] {return LBRACKET;}
-[)] {return RBRACKET;}
-[\n] {return 0;}
-[ \t]   {};
+"for"                           {return FOR;}
+"{"                             {return LP;}
+"} "                            {return RP;}
+"("                             {return LC;}
+")"                             {return RC;}
+[A-Za-z_][A-Za-z0-9_]*          {return IDENTIFIER;}
+";"                             {return ';' ;}
+"="                             {return EQ ;}
+">"|"<"|"<="|">="|"=="|"!="     {return RELOP ;}
+[0-9]+                          { return NUM ;}
+"++"|"--"                       {return INDE;}
+"\n"                            {return 0;}
+[ \t]                         ;
+.                               {return INVALID;}
 
 %%
+
+int yywrap(void){
+    return 1;
+}

@@ -1,53 +1,29 @@
 %{
-#include <stdio.h>
-#include <ctype.h>
-int flag=0;
-int yylex(void);
-int yyerror(char *s);
-int yywrap(void);
+    #include <stdio.h>
+    #include <stdlib.h>
+    int yylex(void);
+    void yyerror(const char*s);
 %}
-
-%token LETTER NUMBER INVALID SPACE
+%token IDENTIFIER INVALID
+%start program
 
 %%
-variable: LETTER valid 
-	| LETTER     
-	;
-valid: LETTER valid
-     | NUMBER valid
-     | LETTER
-     | NUMBER
-     ;
+program : IDENTIFIER 
+        {
+            printf("Valid Identifier\n");
+        }
+        | INVALID
+        {
+            printf("Invalid Identifier\n");
+        }
+        ;
 %%
 
-int yylex()
-{
-	int c=getchar();
-	if(isalpha(c)) return LETTER;
-	if(isdigit(c)) return NUMBER;
-	else if(c==EOF) return 0;
-	else if((c == '\n'))return 0;
-	return INVALID;
-	
-	
-}
-
-int yyerror(char *s) {
-    printf("Error: %s\n", s);
+int main(){
+    printf("Enter the String : ");
+    yyparse();
     return 0;
 }
 
-int yywrap() { return 1; }
-
-int main() {
-    printf("Enter variable: ");
-    if(yyparse()==0)
-    {
-	printf("Valid variable\n");
-    }
-    else
-    {
-	printf("invalid variable\n");
-    }
-    return 0;
+void yyerror(const char*s){
 }
